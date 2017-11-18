@@ -19,11 +19,14 @@ local resetting = false
 local tomenu = false
 local textopacity = {0}
 
+local margin = 20
+
 local stats = {
   moves = 0,
   time = 0,
   pushes = 0,
-  lvl = 0
+  lvl = 0,
+  y = 0
 }
 
 local dir = 'up'
@@ -34,13 +37,17 @@ local function reset(lvl)
     moves = 0,
     time = 0,
     pushes = 0,
-    lvl = lvl
+    lvl = lvl,
+    y   = height-font.medium:getHeight('A') - margin,
+
   }
 
   level = loadlevel(lvl)
   level.ents = lume.sort(level.ents, 'z')
   flux.to(textopacity, 0.5, {255})
 end
+
+
 
 function game:init()
 end
@@ -69,20 +76,21 @@ function game:draw()
   love.graphics.setColor(255, 255, 255, textopacity[1])
   love.graphics.setFont(font.medium)
   local msg = "Level " .. tostring(stats.lvl)
-  local margin = 20
+  local y = height-font.medium:getHeight('A') - margin
+  local sidemargin = math.floor(margin + width/10)
 
-  love.graphics.printf(msg, margin,margin, width, 'left')
+  love.graphics.printf(msg, sidemargin,margin, width, 'left')
 
-  local y = height-font.medium:getHeight('A')-margin
 
   msg = "Moves: " .. tostring(math.floor(stats.moves))
-  love.graphics.printf(msg, margin,y, width, 'left')
+
+  love.graphics.printf(msg, sidemargin,y, width, 'left')
 
   msg = "Pushes: " .. tostring(math.floor(stats.pushes))
   love.graphics.printf(msg, margin,y, width, 'center')
 
   msg = "Time: " .. tostring(math.floor(stats.time))
-  love.graphics.printf(msg, -margin,y, width, 'right')
+  love.graphics.printf(msg, -sidemargin - width/10,y, width, 'right')
 end
 
 function game:update(dt)
@@ -163,6 +171,7 @@ function game:update(dt)
         if not overlaps(v.pos, level.endpoints) then return end
       end
 
+      -- we won!
 
       completedlevels[stats.lvl] = {
         pushes = stats.pushes,
@@ -177,15 +186,30 @@ function game:update(dt)
       colors.index = colors.index + 1
 
       if colors.index > #palette then colors.index = 1 end
-
-      local pal = lume.clone(palette[colors.index])
+      local newcolors = lume.clone(palette[colors.index])
 
       for i,color in ipairs(colors) do
-        flux.to(color, 1, pal[i])
+        flux.to(color, 0.5,newcolors[i])
+      end
+      local msg = {
+        opacity = 0,
+        txt = lume.randomchoice({
+          'Well done!',
+          'Nice work!',
+          'Yeah!!',
+          'You solved it!',
+          'Easy game!'
+        }),
+
+      }
+      flux.to(msg, 2, {opacity = 255})
+      flux.to(textopacity, 0.5, {0})
+
+      for i,o in ipairs(level.ents) do
+        flux.to(o, math.random() + 0.2, {shownscale = 0})
       end
 
-      stats.lvl = stats.lvl + 1
-      reset(stats.lvl)
+      Timer.after(1.5, function() Gamestate.switch(states.menu, msg) end)
     end
   end
 end
@@ -206,10 +230,8 @@ function game:keypressed(key)
   end
 
   if key == 'escape' and not tomenu then
+    tomenu = true
     for i,v in ipairs(level.ents) do
-      tomenu = true
-      --v.shownpos = vector(level.width/2, level.height/2)
-      --flux.to(v.shownpos, math.random()/2 + 0.2, v.pos):ease('quadinout')
       local time = math.random()/3 + 0.2
       local away = v.pos - vector(level.width/2, level.height/2)
       flux.to(v.shownpos, time, v.shownpos + away * 4/away:len()
@@ -217,21 +239,10 @@ function game:keypressed(key)
       :ease('quadinout')
       flux.to(v, time, {shownscale = 0})
     end
+    Timer.after(secs or 0.5, function() Gamestate.switch(states.menu) end)
     flux.to(textopacity, 0.5, {0})
-    Timer.after(0.5, function() Gamestate.switch(states.menu) end)
   end
 
-  if key == 'x' then
-    colors.index = colors.index + 1
-
-    if colors.index > #palette then colors.index = 1 end
-    print(colors.index)
-    local newcolors = lume.clone(palette[colors.index])
-
-    for i,color in ipairs(colors) do
-      flux.to(color, 0.5,newcolors[i])
-    end
-  end
 end
 
 return game

@@ -32,7 +32,7 @@ function start:enter()
   tiles = {ents = {}, width = 1, height = 1}
   local colori = {6,4,9,5}
   for i = 1, 2000 do
-    local pos = vector.randomDirection(30, 200)
+    local pos = vector.randomDirection(35, 200)
     local o = {
       shownpos = pos,
       originalpos = pos:clone(),

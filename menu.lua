@@ -1,5 +1,6 @@
 local levels = require 'assets.levels'
 local vector = require 'lib.vector'
+local lume   = require 'lib.lume'
 
 local menu = {}
 
@@ -15,6 +16,8 @@ local outgoinglevel
 local textopacity = {0}
 
 local statsopacity = {0}
+
+local message
 
 -- how many levels we want to display on each side of the middle level
 local minmax = 5
@@ -43,9 +46,7 @@ local function reset(dir)
     end
     return
   end
-  --flux.to(statsopacity, 0.3, {0})
-  --:after(statsopacity, 0.3, {255})
-  -- change the level we are looking at
+
   for i=-minmax,minmax do
     local level = displaying[i]
     local offset = to * i
@@ -60,7 +61,7 @@ local function reset(dir)
   end
 end
 
-function menu:enter()
+function menu:enter(prev, msg)
   haschosenlvl = false
   reset()
   textopacity = {0}
@@ -69,34 +70,50 @@ function menu:enter()
   statsopacity = {0}
   flux.to(statsopacity, 1, {255})
 
+  message = msg
 end
 
 function menu:draw()
+  local margin = 20
   love.graphics.clear(colors[1])
+
+  for i=-minmax,minmax do
+    drawLevel(displaying[i], width/2, height/2,  scale + math.abs(math.sin(timepassed*2)))
+  end
+
   love.graphics.setColor(255, 255, 255, textopacity[1])
   love.graphics.setFont(font.large)
   love.graphics.printf("Level " .. tostring(currlevel), 0,50, width, 'center')
 
   love.graphics.setFont(font.medium)
-  local margin = 20
   local y = height-font.medium:getHeight('A')-margin
   if completedlevels[currlevel] then
     love.graphics.setColor(255, 255, 255, statsopacity[1])
     local completed = completedlevels[currlevel]
     msg = "Moves: " .. tostring(math.floor(completed.moves))
-    love.graphics.printf(msg, margin,y, width, 'left')
+    love.graphics.printf(msg, margin + width/10,y, width, 'left')
 
     msg = "Pushes: " .. tostring(math.floor(completed.pushes))
     love.graphics.printf(msg, margin,y, width, 'center')
 
     msg = "Time: " .. tostring(math.floor(completed.time))
-    love.graphics.printf(msg, -margin,y, width, 'right')
+    love.graphics.printf(msg, -margin - width/10,y, width, 'right')
   else
     love.graphics.printf('Not completed.', -margin,y, width, 'center')
   end
 
-  for i=-minmax,minmax do
-    drawLevel(displaying[i], width/2, height/2,  scale + math.abs(math.sin(timepassed*2)))
+  if message then
+    love.graphics.setFont(font.large)
+    love.graphics.setColor(255, 255, 255, message.opacity)
+    local y = math.floor(height/2-font.large:getHeight('L')/2)
+    local c = lume.clone(colors[9])
+    c[4] = message.opacity
+    love.graphics.setColor(c)
+    love.graphics.printf(message.txt, 1, y+1, width, 'center')
+
+    love.graphics.setColor(255, 255, 255, message.opacity)
+    love.graphics.printf(message.txt, 0, y, width, 'center')
+
   end
 end
 
@@ -105,6 +122,11 @@ function menu:update(dt)
 end
 
 function menu:keypressed(key)
+  if message and
+  (key == 'left' or key == 'right' or key == 'space' or key == 'escape') then
+    flux.to(message, 0.4, {opacity = 0})
+  end
+
   if key == 'left' then
     currlevel = currlevel - 1
     reset(1)

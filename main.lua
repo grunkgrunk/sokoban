@@ -123,6 +123,7 @@ end
 
 function love.load()
   math.randomseed(os.time())
+  love.mouse.setVisible(false)
   local f = lume.fn(love.graphics.newFont, 'assets/thin.ttf')
   font = {
     small = f(16),
@@ -139,7 +140,7 @@ function love.load()
 
 
   Gamestate.registerEvents()
-  Gamestate.switch(states.menu)
+  Gamestate.switch(states.game, 1)
 end
 
 function love.update(dt)
