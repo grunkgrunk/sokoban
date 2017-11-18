@@ -205,11 +205,13 @@ function game:update(dt)
       flux.to(msg, 2, {opacity = 255})
       flux.to(textopacity, 0.5, {0})
 
-      for i,o in ipairs(level.ents) do
-        flux.to(o, math.random() + 0.2, {shownscale = 0})
-      end
+      Timer.after(0.5, function()
+        for i,o in ipairs(level.ents) do
+          flux.to(o, math.random() + 0.2, {shownscale = 0})
+        end
 
-      Timer.after(1.5, function() Gamestate.switch(states.menu, msg) end)
+        Timer.after(1.5, function() Gamestate.switch(states.menu, msg) end)
+      end)
     end
   end
 end
@@ -239,7 +241,7 @@ function game:keypressed(key)
       :ease('quadinout')
       flux.to(v, time, {shownscale = 0})
     end
-    Timer.after(secs or 0.5, function() Gamestate.switch(states.menu) end)
+    Timer.after(0.5, function() Gamestate.switch(states.menu) end)
     flux.to(textopacity, 0.5, {0})
   end
 

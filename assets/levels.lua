@@ -1,6 +1,15 @@
 return
 {
   {
+    "XXXXXXX",
+    "X @   X",
+    "X  ** X",
+    "X     X",
+    "X     X",
+    "X ..& X",
+    "XXXXXXX",
+  },
+  {
     "    XXXXX             ",
     "    X   X             ",
     "    X*  X             ",
