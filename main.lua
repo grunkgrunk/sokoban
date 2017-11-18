@@ -68,7 +68,7 @@ function loadlevel(lvl)
         local entprops = {
           wall     = { z = 1, color = 6},
           player   = { z = 2, color = 4, shownscale = 0.7, scale = 0.7 },
-          box      = { z = 2, color = 9, shownscale = 0.8, scale = 0.8 },
+          box      = { z = 2, color = 9, shownscale = 0.7, scale = 0.7 },
           endpoint = { z = 1, color = 5 },
         }
 

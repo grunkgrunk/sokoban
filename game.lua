@@ -205,13 +205,13 @@ function game:update(dt)
 
       resetting = true
       Timer.after(0.5, function()
+        flux.to(textopacity, 0.5, {0})
         for i,o in ipairs(level.ents) do
           flux.to(o, math.random(), {shownscale = 0})
         end
 
         Timer.after(1, function()
           flux.to(msg, 2, {opacity = 255})
-          flux.to(textopacity, 0.5, {0})
           Gamestate.switch(states.menu, msg)
         end)
       end)
@@ -224,7 +224,7 @@ function game:keypressed(key)
     resetting = true
     for i,v in ipairs(level.ents) do
       local target = v.originalpos-v.pos
-      flux.to(v.shownpos, math.random()/3 + 0.1, v.pos + target*0.7 + vector.randomDirection() * 10)
+      flux.to(v.shownpos, math.random()/3 + 0.1, v.pos + target*0.7 + vector.randomDirection() * 5)
       :after(math.random()/3 + 0.1, v.originalpos)
 
       flux.to(v, math.random()/3 + 0.1, {shownscale = v.scale/5})
