@@ -31,8 +31,8 @@ function start:enter()
   -- generate a bunch of random tiles to play around with
   tiles = {ents = {}, width = 1, height = 1}
   local colori = {6,4,9,5}
-  for i = 1, 1000 do
-    local pos = vector.randomDirection(30, 100)
+  for i = 1, 2000 do
+    local pos = vector.randomDirection(30, 200)
     local o = {
       shownpos = pos,
       originalpos = pos:clone(),
@@ -90,7 +90,7 @@ function start:keypressed(key)
       flux.to(o, time, {shownscale = 0})
     end
 
-    Timer.after(2.5, function() Gamestate.switch(states.menu) end)
+    Timer.after(2.1, function() Gamestate.switch(states.menu) end)
   end
 
   if key == 'escape' then

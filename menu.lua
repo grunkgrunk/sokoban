@@ -38,7 +38,7 @@ local function reset(dir)
         local time = math.random() + 0.5
         local target = v.pos + offset * -1
         flux.to(v.shownpos, time, target)
-        flux.to(v, time, {shownscale = v.scale * 1 / (math.abs(i) + 1) })
+        flux.to(v, time, { shownscale = v.scale * 1 / (math.abs(i) + 1) })
       end
     end
     return
