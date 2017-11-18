@@ -171,6 +171,8 @@ function game:update(dt)
         if not overlaps(v.pos, level.endpoints) then return end
       end
 
+      if resetting then return end
+
       -- we won!
 
       completedlevels[stats.lvl] = {
@@ -179,9 +181,8 @@ function game:update(dt)
         moves  = stats.moves
       }
 
-      -- save here
-      local seri = serialize(completedlevels)
-      local success = love.filesystem.write('savedata.lua', seri)
+      -- we save here
+      local success = love.filesystem.write('savedata.lua', serialize(completedlevels))
 
       colors.index = colors.index + 1
 
@@ -200,17 +201,19 @@ function game:update(dt)
           'You solved it!',
           'Easy game!'
         }),
-
       }
-      flux.to(msg, 2, {opacity = 255})
-      flux.to(textopacity, 0.5, {0})
 
+      resetting = true
       Timer.after(0.5, function()
         for i,o in ipairs(level.ents) do
-          flux.to(o, math.random() + 0.2, {shownscale = 0})
+          flux.to(o, math.random(), {shownscale = 0})
         end
 
-        Timer.after(1.5, function() Gamestate.switch(states.menu, msg) end)
+        Timer.after(1, function()
+          flux.to(msg, 2, {opacity = 255})
+          flux.to(textopacity, 0.5, {0})
+          Gamestate.switch(states.menu, msg)
+        end)
       end)
     end
   end
