@@ -58,7 +58,7 @@ function start:draw()
   printfshadow('Sokoban', 0,y, width, 'center', textopacity[1])
   love.graphics.setFont(font.medium)
 
-  printfshadow('By Daniel', 0,y + 70, width, 'center', textopacity[1])
+  printfshadow('By grunkgrunk', 0,y + 70, width, 'center', textopacity[1])
 
 
   printfshadow("Controls", 0,y+140, width, 'center', textopacity[1])
