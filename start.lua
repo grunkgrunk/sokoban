@@ -54,19 +54,17 @@ function start:draw()
 
   love.graphics.setColor(255, 255, 255, textopacity[1])
   love.graphics.setFont(font.large)
-  local y = math.floor(height/2-font.large:getHeight('S')/2 - 70)
-  love.graphics.printf('Sokoban', 0,y, width, 'center')
+  local y = height/2-font.large:getHeight('S')/2 - 70
+  printfshadow('Sokoban', 0,y, width, 'center', textopacity[1])
   love.graphics.setFont(font.medium)
-  love.graphics.printf('By Daniel', 0,y + 70, width, 'center')
+
+  printfshadow('By Daniel', 0,y + 70, width, 'center', textopacity[1])
 
 
-  love.graphics.printf("Controls", 0,y+140, width, 'center')
+  printfshadow("Controls", 0,y+140, width, 'center', textopacity[1])
 
   love.graphics.setFont(font.small)
-  love.graphics.printf("Space and arrow keys.\nEscape to go back or quit.", 0,y+180, width, 'center')
-
-
-
+  printfshadow("Space and arrow keys.\nEscape to go back or quit.", 0,y+180, width, 'center', textopacity[1])
 end
 
 function start:keypressed(key)
@@ -83,8 +81,6 @@ function start:keypressed(key)
 
       local away = o.shownpos - vector(tiles.width/2, tiles.height/2)
       local time = math.random() + 1
-      --flux.to(o.shownpos, time, o.shownpos + away)
-      --flux.to(o.shownpos, time/2, vector(tiles.width/2, tiles.height/2) + vector.randomDirection(1,10))
       flux.to(o.shownpos, time, o.shownpos + vector.randomDirection(1, 100))
 
       flux.to(o, time, {shownscale = 0})
@@ -94,8 +90,6 @@ function start:keypressed(key)
   end
 
   if key == 'escape' then
-    -- save the game
-
     love.event.quit()
   end
 end

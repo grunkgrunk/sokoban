@@ -14,9 +14,6 @@ local displaying = {}
 local outgoinglevel
 
 local textopacity = {0}
-
-local statsopacity = {0}
-
 local message
 
 -- how many levels we want to display on each side of the middle level
@@ -66,10 +63,6 @@ function menu:enter(prev, msg)
   reset()
   textopacity = {0}
   flux.to(textopacity, 1, {255})
-
-  statsopacity = {0}
-  flux.to(statsopacity, 1, {255})
-
   message = msg
 end
 
@@ -81,40 +74,31 @@ function menu:draw()
     drawLevel(displaying[i], width/2, height/2,  scale + math.abs(math.sin(timepassed*2)))
   end
 
-  love.graphics.setColor(255, 255, 255, textopacity[1])
   love.graphics.setFont(font.large)
-  love.graphics.printf("Level " .. tostring(currlevel), 0,50, width, 'center')
+  printfshadow("Level " .. tostring(currlevel), 0,50, width, 'center', textopacity[1])
 
   love.graphics.setFont(font.medium)
   local y = height-font.medium:getHeight('A')-margin
 
   -- if we can display some information about how the player did on last play-through
   if completedlevels[currlevel] then
-    love.graphics.setColor(255, 255, 255, statsopacity[1])
     local completed = completedlevels[currlevel]
-    msg = "Moves: " .. tostring(math.floor(completed.moves))
-    love.graphics.printf(msg, margin + width/10,y, width, 'left')
+    msg = "Moves: " .. tostring(math.floor(completed.moves), textopacity[1])
+    printfshadow(msg, margin + width/10,y, width, 'left')
 
-    msg = "Pushes: " .. tostring(math.floor(completed.pushes))
-    love.graphics.printf(msg, margin,y, width, 'center')
+    msg = "Pushes: " .. tostring(math.floor(completed.pushes), textopacity[1])
+    printfshadow(msg, margin,y, width, 'center')
 
     msg = "Time: " .. tostring(math.floor(completed.time))
-    love.graphics.printf(msg, -margin - width/10,y, width, 'right')
+    printfshadow(msg, -margin - width/10,y, width, 'right', textopacity[1])
   else
-    love.graphics.printf('Not completed.', -margin,y, width, 'center')
+    printfshadow('Not completed.', -margin,y, width, 'center', textopacity[1])
   end
 
   if message then
     love.graphics.setFont(font.large)
-    love.graphics.setColor(255, 255, 255, message.opacity)
     local y = math.floor(height/2-font.large:getHeight('L')/2)
-    local c = lume.clone(colors[9])
-    c[4] = message.opacity
-    love.graphics.setColor(c)
-    love.graphics.printf(message.txt, 1, y+1, width, 'center')
-
-    love.graphics.setColor(255, 255, 255, message.opacity)
-    love.graphics.printf(message.txt, 0, y, width, 'center')
+    printfshadow(message.txt, 0,y, width, 'center', message.opacity)
   end
 end
 
@@ -161,7 +145,6 @@ function menu:keypressed(key)
     end
 
     flux.to(textopacity, 0.5, {0})
-    flux.to(statsopacity, 0.5, {0})
     Timer.after(0.6, function() Gamestate.switch(states.game, currlevel) end)
   end
 
@@ -174,7 +157,6 @@ function menu:keypressed(key)
       end
     end
     flux.to(textopacity, 0.5, {0})
-    flux.to(statsopacity, 0.5, {0})
     Timer.after(0.6, function() Gamestate.switch(states.start, currlevel) end)
   end
 end

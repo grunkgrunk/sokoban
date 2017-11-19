@@ -47,11 +47,6 @@ local function reset(lvl)
   flux.to(textopacity, 0.5, {255})
 end
 
-
-
-function game:init()
-end
-
 function game:enter(prev, lvl)
   tomenu = false
   local textopacity = {0}
@@ -73,24 +68,21 @@ function game:draw()
   end
   drawLevel(level, width/2, height/2, dim * 0.8)
 
-  love.graphics.setColor(255, 255, 255, textopacity[1])
   love.graphics.setFont(font.medium)
   local msg = "Level " .. tostring(stats.lvl)
   local y = height-font.medium:getHeight('A') - margin
   local sidemargin = math.floor(margin + width/10)
 
-  love.graphics.printf(msg, sidemargin,margin, width, 'left')
-
+  printfshadow(msg, sidemargin,margin, width, 'left', textopacity[1])
 
   msg = "Moves: " .. tostring(math.floor(stats.moves))
-
-  love.graphics.printf(msg, sidemargin,y, width, 'left')
+  printfshadow(msg, sidemargin,y, width, 'left', textopacity[1])
 
   msg = "Pushes: " .. tostring(math.floor(stats.pushes))
-  love.graphics.printf(msg, margin,y, width, 'center')
+  printfshadow(msg, margin,y, width, 'center', textopacity[1])
 
   msg = "Time: " .. tostring(math.floor(stats.time))
-  love.graphics.printf(msg, -sidemargin - width/10,y, width, 'right')
+  printfshadow(msg, -sidemargin - width/10,y, width, 'right', textopacity[1])
 end
 
 function game:update(dt)
@@ -147,8 +139,7 @@ function game:update(dt)
           local boxcol = overlaps(bpos, level.ents)
 
           local toendpoint = 1
-          for k, bcol in ipairs(boxcol) do
-            print(bcol.type)
+          for i,bcol in ipairs(boxcol) do
             if bcol.type == 'wall' or bcol.type == 'box' then return end
             -- the box got moved to an endpoint
             toendpoint = 0.5
@@ -159,12 +150,6 @@ function game:update(dt)
           flux.to(pcol.shownpos, animspeed, bpos)
           flux.to(pcol, animspeed, {shownscale = pcol.scale*1.1})
           :after(animspeed, {shownscale = pcol.scale * toendpoint})
-          -- :oncomplete(function()
-          --   if toendpoint then
-          --     flux.to(pcol, animspeed, {shownscale = playercol.scale*1.5})
-          --     :after(animspeed, {shownscale = playercol.scale})
-          --   end
-          -- end)
         end
       end
 
@@ -174,7 +159,6 @@ function game:update(dt)
       flux.to(level.player, animspeed, {shownscale = level.player.scale*0.9})
       :after(animspeed, {shownscale = level.player.scale})
 
-
       for i,v in ipairs(level.boxes) do
         if not overlaps(v.pos, level.endpoints)[1] then return end
       end
@@ -182,7 +166,6 @@ function game:update(dt)
       if resetting then return end
 
       -- we won!
-
       completedlevels[stats.lvl] = {
         pushes = stats.pushes,
         time   = stats.time,
@@ -200,6 +183,7 @@ function game:update(dt)
       for i,color in ipairs(colors) do
         flux.to(color, 0.5,newcolors[i])
       end
+
       local msg = {
         opacity = 0,
         txt = lume.randomchoice({

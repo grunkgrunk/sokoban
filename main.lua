@@ -1,5 +1,4 @@
 -- Libraries
--- change colors on every move
 local vector = require 'lib.vector'
 
 local lume = require 'lib.lume'
@@ -123,6 +122,16 @@ for i=1,#levels do
   loadedlevels[i] = loadlevel(i)
 end
 
+function printfshadow(txt, x,y, w, align, opacity)
+  local c = lume.clone(colors[9])
+  c[4] = opacity
+  x,y,w = math.floor(x), math.floor(y), math.floor(w)
+  love.graphics.setColor(c)
+  love.graphics.printf(txt, x+2,y+2, w, align)
+  love.graphics.setColor(255, 255, 255, opacity)
+  love.graphics.printf(txt, x,y, w, align)
+end
+
 function love.load()
   math.randomseed(os.time())
   love.mouse.setVisible(false)
@@ -142,7 +151,7 @@ function love.load()
 
 
   Gamestate.registerEvents()
-  Gamestate.switch(states.game, 1)
+  Gamestate.switch(states.start)
 end
 
 function love.update(dt)
