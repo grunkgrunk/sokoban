@@ -87,6 +87,8 @@ function menu:draw()
 
   love.graphics.setFont(font.medium)
   local y = height-font.medium:getHeight('A')-margin
+
+  -- if we can display some information about how the player did on last play-through
   if completedlevels[currlevel] then
     love.graphics.setColor(255, 255, 255, statsopacity[1])
     local completed = completedlevels[currlevel]
@@ -113,7 +115,6 @@ function menu:draw()
 
     love.graphics.setColor(255, 255, 255, message.opacity)
     love.graphics.printf(message.txt, 0, y, width, 'center')
-
   end
 end
 
@@ -124,7 +125,7 @@ end
 function menu:keypressed(key)
   if message and
   (key == 'left' or key == 'right' or key == 'space' or key == 'escape') then
-    flux.to(message, 0.4, {opacity = 0})
+    flux.to(message, 0.2, {opacity = 0})
   end
 
   if key == 'left' then

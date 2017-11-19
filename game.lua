@@ -132,43 +132,51 @@ function game:update(dt)
       local pos = level.player.pos + movement
 
       function overlaps(pos, t, disregard)
+        local cols = {}
         for i,v in ipairs(t) do
-          if pos ~= v and v.type ~= disregard then
-            if pos:equals(v.pos) then return v end
-          end
+          if pos:equals(v.pos) then cols[#cols + 1] = v end
         end
-        return false
+        return cols
       end
 
-      local playercol = overlaps(pos, level.ents, 'endpoint')
-      if playercol then
-        if playercol.type == 'wall' then return end
-
-        if playercol.type == 'box' then
+      local playercol = overlaps(pos, level.ents)
+      for i,pcol in ipairs(playercol) do
+        if pcol.type == 'wall' then return end
+        if pcol.type == 'box' then
           local bpos = pos + movement
-          local boxcol = overlaps(bpos, level.ents, 'endpoint')
+          local boxcol = overlaps(bpos, level.ents)
 
-          if boxcol then
-            if boxcol.type == 'wall' or boxcol.type == 'box' then return end
+          local toendpoint = 1
+          for k, bcol in ipairs(boxcol) do
+            print(bcol.type)
+            if bcol.type == 'wall' or bcol.type == 'box' then return end
+            -- the box got moved to an endpoint
+            toendpoint = 0.5
           end
 
           stats.pushes = stats.pushes + 1
-          playercol.pos = bpos
-          flux.to(playercol.shownpos, animspeed, bpos)
-          flux.to(playercol, animspeed, {shownscale = playercol.scale*1.2})
-          :after(animspeed, {shownscale = playercol.scale})
+          pcol.pos = bpos
+          flux.to(pcol.shownpos, animspeed, bpos)
+          flux.to(pcol, animspeed, {shownscale = pcol.scale*1.1})
+          :after(animspeed, {shownscale = pcol.scale * toendpoint})
+          -- :oncomplete(function()
+          --   if toendpoint then
+          --     flux.to(pcol, animspeed, {shownscale = playercol.scale*1.5})
+          --     :after(animspeed, {shownscale = playercol.scale})
+          --   end
+          -- end)
         end
       end
 
       stats.moves = stats.moves + 1
       level.player.pos = pos
       flux.to(level.player.shownpos, animspeed, pos)
-      flux.to(level.player, animspeed, {shownscale = level.player.scale*0.8})
+      flux.to(level.player, animspeed, {shownscale = level.player.scale*0.9})
       :after(animspeed, {shownscale = level.player.scale})
 
 
       for i,v in ipairs(level.boxes) do
-        if not overlaps(v.pos, level.endpoints) then return end
+        if not overlaps(v.pos, level.endpoints)[1] then return end
       end
 
       if resetting then return end
@@ -207,10 +215,11 @@ function game:update(dt)
       Timer.after(0.5, function()
         flux.to(textopacity, 0.5, {0})
         for i,o in ipairs(level.ents) do
-          flux.to(o, math.random(), {shownscale = 0})
+          flux.to(o, math.random()/2 + 0.1, {shownscale = 1.5})
+          :after(math.random()/2 + 0.1, {shownscale = 0})
         end
 
-        Timer.after(1, function()
+        Timer.after(1.2, function()
           flux.to(msg, 2, {opacity = 255})
           Gamestate.switch(states.menu, msg)
         end)
@@ -244,7 +253,7 @@ function game:keypressed(key)
       :ease('quadinout')
       flux.to(v, time, {shownscale = 0})
     end
-    Timer.after(0.5, function() Gamestate.switch(states.menu) end)
+    Timer.after(0.2, function() Gamestate.switch(states.menu) end)
     flux.to(textopacity, 0.5, {0})
   end
 

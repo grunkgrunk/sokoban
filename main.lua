@@ -90,7 +90,9 @@ function loadlevel(lvl)
           endpoints[#endpoints + 1] = create('endpoint')
         elseif char == '&' then
           endpoints[#endpoints + 1] = create('endpoint')
-          boxes[#boxes + 1] = create('box')
+          local box = create('box')
+          flux.to(box, 0.1, {shownscale = box.scale * 0.5}):delay(0.5)
+          boxes[#boxes + 1] = box
         end
       end
     end
