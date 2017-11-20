@@ -3,7 +3,7 @@ A clone of the popular Japanese game 'Sokoban' from 1981. The levels are not mad
 
 See the game in action here: https://imgur.com/gallery/apzREUB.
 
-## How to get it??
+## How to get it
 Make sure you have Love2D installed: https://love2d.org/. Then download the sokoban.love file and double-click it.
 
 ## Controls
