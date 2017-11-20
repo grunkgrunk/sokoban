@@ -13,5 +13,5 @@ Arrow keys to move around. Escape key to go back or exit the game. Hitting r wil
 Yes, currently there are no sounds in this game. Feel free to contribute :) 
 
 ## What's next?
-I'm thinking about adding another game mechanic so that the game is not a clone anymore.
+I'm thinking about adding another game mechanic (don't know what it should be though) so that the game is not a clone anymore.
 
