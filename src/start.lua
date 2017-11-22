@@ -60,7 +60,6 @@ function start:draw()
 
   printfshadow('By grunkgrunk', 0,y + 70, width, 'center', textopacity[1])
 
-
   printfshadow("Controls", 0,y+140, width, 'center', textopacity[1])
 
   love.graphics.setFont(font.small)
@@ -82,7 +81,6 @@ function start:keypressed(key)
       local away = o.shownpos - vector(tiles.width/2, tiles.height/2)
       local time = math.random() + 1
       flux.to(o.shownpos, time, o.shownpos + vector.randomDirection(1, 100))
-
       flux.to(o, time, {shownscale = 0})
     end
 

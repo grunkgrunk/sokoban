@@ -26,7 +26,6 @@ local stats = {
   time = 0,
   pushes = 0,
   lvl = 0,
-  y = 0
 }
 
 local dir = 'up'
@@ -38,18 +37,17 @@ local function reset(lvl)
     time = 0,
     pushes = 0,
     lvl = lvl,
-    y   = height-font.medium:getHeight('A') - margin,
-
   }
 
   level = loadlevel(lvl)
   level.ents = lume.sort(level.ents, 'z')
+  textopacity = {0}
   flux.to(textopacity, 0.5, {255})
 end
 
 function game:enter(prev, lvl)
   tomenu = false
-  local textopacity = {0}
+
   reset(lvl)
   for i,v in ipairs(level.ents) do
     v.shownscale = 0
@@ -86,7 +84,7 @@ function game:draw()
 end
 
 function game:update(dt)
-  if resetting then return end
+  if resetting or tomenu then return end
 
   stats.time = stats.time + dt
 
@@ -163,8 +161,6 @@ function game:update(dt)
         if not overlaps(v.pos, level.endpoints)[1] then return end
       end
 
-      if resetting then return end
-
       -- we won!
       completedlevels[stats.lvl] = {
         pushes = stats.pushes,
@@ -238,7 +234,7 @@ function game:keypressed(key)
       flux.to(v, time, {shownscale = 0})
     end
     Timer.after(0.2, function() Gamestate.switch(states.menu) end)
-    flux.to(textopacity, 0.5, {0})
+    flux.to(textopacity, 0.2, {0})
   end
 
 end

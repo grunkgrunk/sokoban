@@ -83,11 +83,11 @@ function menu:draw()
   -- if we can display some information about how the player did on last play-through
   if completedlevels[currlevel] then
     local completed = completedlevels[currlevel]
-    msg = "Moves: " .. tostring(math.floor(completed.moves), textopacity[1])
-    printfshadow(msg, margin + width/10,y, width, 'left')
+    msg = "Moves: " .. tostring(math.floor(completed.moves))
+    printfshadow(msg, margin + width/10,y, width, 'left', textopacity[1])
 
-    msg = "Pushes: " .. tostring(math.floor(completed.pushes), textopacity[1])
-    printfshadow(msg, margin,y, width, 'center')
+    msg = "Pushes: " .. tostring(math.floor(completed.pushes))
+    printfshadow(msg, margin,y, width, 'center', textopacity[1])
 
     msg = "Time: " .. tostring(math.floor(completed.time))
     printfshadow(msg, -margin - width/10,y, width, 'right', textopacity[1])
