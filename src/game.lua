@@ -5,9 +5,9 @@ local serialize = require 'lib.ser'
 local game = {}
 
 local keys = {
-  up = {curr = false, prev = false},
-  down = {curr = false, prev = false},
-  left = {curr = false, prev = false},
+  up    = {curr = false, prev = false},
+  down  = {curr = false, prev = false},
+  left  = {curr = false, prev = false},
   right = {curr = false, prev = false},
 }
 
@@ -22,10 +22,10 @@ local textopacity = {0}
 local margin = 20
 
 local stats = {
-  moves = 0,
-  time = 0,
+  moves  = 0,
+  time   = 0,
   pushes = 0,
-  lvl = 0,
+  lvl    = 0,
 }
 
 local dir = 'up'
@@ -33,10 +33,10 @@ local dir = 'up'
 local function reset(lvl)
   resetting = false
   stats = {
-    moves = 0,
-    time = 0,
+    moves  = 0,
+    time   = 0,
     pushes = 0,
-    lvl = lvl,
+    lvl    = lvl,
   }
 
   level = loadlevel(lvl)

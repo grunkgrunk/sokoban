@@ -11,8 +11,6 @@ local scale = 20
 
 local displaying = {}
 
-local outgoinglevel
-
 local textopacity = {0}
 local message
 
