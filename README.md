@@ -1,6 +1,8 @@
 # Sokoban Clone
 A clone of the popular Japanese game 'Sokoban' from 1981. The levels are not made by me (okay, the first one is but that doesn't count), all the others have been taken from here: https://github.com/begoon/sokoban-maps.
 
+The color palettes used in the game come from here: https://material.io/guidelines/style/color.html#color-color-palette.
+
 See the game in action here: https://imgur.com/gallery/apzREUB.
 
 ## How to get it
